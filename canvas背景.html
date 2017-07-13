@@ -27,7 +27,6 @@
 			for (var i=0; i<ball_no; i++) {
 				arr.push(new ball());
 			}
-			
 			update();
 			function resetcanvas(){
 				cxt.fillStyle = "#ffffff";
@@ -43,7 +42,6 @@
 					return 'hsla('+hue+',50%,50%,0.5)';
 				})();
 				this.v = Math.floor(5+Math.random()*4);
-				//this.v = 5;
 				this.draw = function(){
 					cxt.fillStyle = this.color;
 					cxt.beginPath();
@@ -54,27 +52,16 @@
 			}
 			function update(){
 				resetcanvas();
-				
 				for (var i=0; i<arr.length; i++) {
 					if (arr[i].r >= arr[i].maxr) {
 						arr.splice(i,1,new ball());
-						console.log(arr.length);
 					} else{
 						arr[i].r += arr[i].v;
 						arr[i].draw();
 					}
-					
 				}
 				setTimeout(update,50);
 			}
-			
-			function run(){
-				
-				//console.log(arr[0])
-				update();
-				
-			}
-			
 		}
 	</script>
 </html>
