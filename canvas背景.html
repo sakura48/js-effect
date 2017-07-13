@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			*{
+				padding: 0px;
+				margin: 0px;
+			}
+			#mycanvas{
+				display: block;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="mycanvas"></canvas>
+	</body>
+	<script type="text/javascript">
+		window.onload = function(){
+			var ball_no = 30;
+			var arr = [];
+			var mycanvas = document.getElementById("mycanvas");
+			var cxt = mycanvas.getContext("2d");
+			var width = mycanvas.width = document.documentElement.clientWidth;
+			var height = mycanvas.height = document.documentElement.clientHeight;
+			for (var i=0; i<ball_no; i++) {
+				arr.push(new ball());
+			}
+			
+			update();
+			function resetcanvas(){
+				cxt.fillStyle = "#ffffff";
+				cxt.fillRect(0,0,width,height);
+			}
+			function ball(){
+				this.x = Math.ceil(Math.random()*width);
+				this.y = Math.ceil(Math.random()*height);
+				this.r = 0;
+				this.maxr = Math.ceil(Math.random()*10)*10;
+				this.color = (function(){
+					var hue = Math.ceil(Math.random()*360);
+					return 'hsla('+hue+',50%,50%,0.5)';
+				})();
+				this.v = Math.floor(5+Math.random()*4);
+				//this.v = 5;
+				this.draw = function(){
+					cxt.fillStyle = this.color;
+					cxt.beginPath();
+					cxt.arc(this.x,this.y,this.r,0,2*Math.PI);
+					cxt.fill();
+					cxt.closePath();
+				}
+			}
+			function update(){
+				resetcanvas();
+				
+				for (var i=0; i<arr.length; i++) {
+					if (arr[i].r >= arr[i].maxr) {
+						arr.splice(i,1,new ball());
+						console.log(arr.length);
+					} else{
+						arr[i].r += arr[i].v;
+						arr[i].draw();
+					}
+					
+				}
+				setTimeout(update,50);
+			}
+			
+			function run(){
+				
+				//console.log(arr[0])
+				update();
+				
+			}
+			
+		}
+	</script>
+</html>
