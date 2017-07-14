@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			#mycanvas{
+				display: block;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="mycanvas" width="" height=""></canvas>
+	</body>
+	<script type="text/javascript">
+		window.onload = function(){
+			var mycanvas = document.getElementById('mycanvas');
+			var cxt = mycanvas.getContext("2d");
+			var width = mycanvas.width = document.documentElement.clientWidth;
+			var height = mycanvas.height = document.documentElement.clientHeight;
+			cxt.font = "200px 华文行楷";
+			cxt.textAlign = "center";
+			setInterval(function(){
+				canvasreset();
+				texteffect();
+			},100);
+			function canvasreset(){
+				cxt.clearRect(0,0,width,height);
+				cxt.fillStyle = "black";
+				cxt.fillRect(0,0,width,height);
+				var grd=cxt.createRadialGradient(width/2,height/2,0,width/2,height/2,400+Math.random()*50);
+				grd.addColorStop(0,"#dcdcdc");
+				grd.addColorStop(1,"#464646");
+				cxt.fillStyle = grd;
+				cxt.fillRect(0,0,width,height);
+			}
+			function texteffect(){
+				cxt.fillStyle = "rgba(45,45,45,0.6)";
+				cxt.shadowColor = (function(){
+					return "rgba(0,0,0,"+(Math.floor(40+Math.random()*30))/100+")";	
+				})()
+				cxt.shadowBlur = Math.floor(Math.random()*10+10);
+				cxt.shadowOffsetX = Math.floor(Math.random()*20-10);
+				cxt.shadowOffsetY = Math.floor(Math.random()*20-10);
+				cxt.fillText("情  怀",width/2,(height+100)/2);
+				bgeffect();
+			}
+			function bgeffect(){
+				var x,y,l;
+				for (var i=0; i<30; i++) {
+					x = Math.floor(Math.random()*width);
+					y = Math.floor(Math.random()*height);
+					l = 100+Math.floor(Math.random()*300);
+					cxt.strokeStyle = (function(){
+						var color = Math.floor(50+Math.random()*100);
+						return "rgba("+color+","+color+","+color+",0.6)";
+					})()
+					cxt.beginPath();
+					cxt.moveTo(x,y);
+					cxt.lineTo(x,y+l);
+					cxt.stroke();
+				}
+			}
+		}
+	</script>
+</html>
