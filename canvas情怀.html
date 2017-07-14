@@ -18,31 +18,34 @@
 			var cxt = mycanvas.getContext("2d");
 			var width = mycanvas.width = document.documentElement.clientWidth;
 			var height = mycanvas.height = document.documentElement.clientHeight;
+			var img = new Image();
+			img.src = "img/bg.jpg";
 			cxt.font = "200px 华文行楷";
 			cxt.textAlign = "center";
 			setInterval(function(){
-				canvasreset();
-				texteffect();
+				texteffect();	
 			},100);
-			function canvasreset(){
-				cxt.clearRect(0,0,width,height);
-				cxt.fillStyle = "black";
-				cxt.fillRect(0,0,width,height);
-				var grd=cxt.createRadialGradient(width/2,height/2,0,width/2,height/2,400+Math.random()*50);
-				grd.addColorStop(0,"#dcdcdc");
-				grd.addColorStop(1,"#464646");
-				cxt.fillStyle = grd;
-				cxt.fillRect(0,0,width,height);
-			}
 			function texteffect(){
-				cxt.fillStyle = "rgba(45,45,45,0.6)";
+				cxt.clearRect(0,0,width,height);
+				cxt.fillStyle = "rgba(200,200,200,0.4)";
 				cxt.shadowColor = (function(){
 					return "rgba(0,0,0,"+(Math.floor(40+Math.random()*30))/100+")";	
 				})()
 				cxt.shadowBlur = Math.floor(Math.random()*10+10);
 				cxt.shadowOffsetX = Math.floor(Math.random()*20-10);
 				cxt.shadowOffsetY = Math.floor(Math.random()*20-10);
-				cxt.fillText("情  怀",width/2,(height+100)/2);
+				cxt.fillText("情  怀",width/2+Math.random()*5,(height+100)/2+Math.random()*5);
+				cxt.globalCompositeOperation = "source-atop";
+				cxt.globalAlpha = 0.6;
+				cxt.drawImage(img,(width/2)-(250+Math.random()*50),150+Math.random()*50);
+				cxt.globalCompositeOperation = "destination-over";
+				cxt.globalAlpha = 1;
+				var grd=cxt.createRadialGradient(width/2,height/2,0,width/2,height/2,400+Math.random()*50);
+				grd.addColorStop(0,"#dcdcdc");
+				grd.addColorStop(1,"#464646");
+				cxt.fillStyle = grd;
+				cxt.fillRect(0,0,width,height);
+				cxt.globalCompositeOperation = "source-over";
 				bgeffect();
 			}
 			function bgeffect(){
@@ -52,8 +55,8 @@
 					y = Math.floor(Math.random()*height);
 					l = 100+Math.floor(Math.random()*300);
 					cxt.strokeStyle = (function(){
-						var color = Math.floor(50+Math.random()*100);
-						return "rgba("+color+","+color+","+color+",0.6)";
+						var color = Math.floor(10+Math.random()*50);
+						return "rgba("+color+","+color+","+color+",0.4)";
 					})()
 					cxt.beginPath();
 					cxt.moveTo(x,y);
