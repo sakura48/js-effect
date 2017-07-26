@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			*{
+				padding: 0px;
+				margin: 0px;
+			}
+			#mycanvas {
+				margin: 100px auto;
+				border: 1px solid black;
+				display: block;
+			}
+			.aaa{
+				position: relative;
+				top: 100px;
+				left: 100px;
+				width: 100px;
+				height: 100px;
+				border: 1px solid red;
+				display: block;
+			}
+		</style>
+	</head>
+
+	<body>
+		<canvas id="mycanvas" width="" height=""></canvas>
+	</body>
+	<script type="text/javascript">
+		window.onload = function(){
+			var mycanvas = document.getElementById("mycanvas");
+			var cxt = mycanvas.getContext("2d");
+			var width = mycanvas.width = 600;
+			var height = mycanvas.height = 600;
+			var ball = new Ball();
+			
+			setInterval(function(){
+				resetcanvas();
+				if (ball.y+ball.r >= 600) {
+					ball.vy = -ball.vy*0.9;
+				}
+				if (ball.y+ball.r > 598 && Math.abs(ball.vy) < 0.5) {
+					ball.y = 600-ball.r;
+					ball.draw();
+				} else{
+					ball.vy += ball.g;
+					ball.y += ball.vy;
+					ball.draw();
+				}
+				
+			},20)
+			
+			function resetcanvas(){
+				cxt.clearRect(0,0,600,600);
+			}
+			
+			function Ball(){
+				this.x = 300;
+				this.y = 100;
+				this.r = 50;
+				this.vy = 0;
+				this.g = 0.5;
+				this.draw = function(){
+					cxt.beginPath();
+					cxt.arc(this.x,this.y,this.r,0,Math.PI*2);
+					cxt.fill();
+					cxt.closePath();
+				}
+			}
+		}
+	</script>
+
+</html>
