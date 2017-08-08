@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			#lunbo {
+				position: relative;
+				width: 1000px;
+				height: 625px;
+				margin: 0px auto;
+				border: 1px solid red;
+			}
+			
+			#lunbo canvas {
+				position: absolute;
+				top: 0px;
+				left: 0px;
+				display: block;
+			}
+			
+			#loader {
+				z-index: -1;
+			}
+		</style>
+		<script type="text/javascript">
+			window.onload = function() {
+				var img_arr = new Array("img/sen1.jpg", "img/sen2.jpg", "img/sen3.jpg")
+				var index = 1;
+				var mycanvas = document.getElementById('mycanvas');
+				var cxt = mycanvas.getContext("2d");
+				var width = mycanvas.width;
+				var height = mycanvas.height;
+				var img = new Image();
+				img.src = img_arr[0];
+				img.onload = function() {
+					cxt.drawImage(img, 0, 0, 1000, 625);
+				}
+				lunbo();
+
+				function lunbo() {
+					var row = 1;
+					var img = new Image();
+					var imgdata = getimgdata(img_arr[index]);
+					var arr_piece = (function() {
+						var arr = [];
+						for(var i = 0; i < 625; i += 25) {
+							for(var j = 0; j < 1000; j += 25) {
+								arr.push(new Piece(j, i));
+							}
+						}
+						return arr;
+					})()
+					setTimeout(function() {
+						var timer = setInterval(function() {
+							var i = Math.floor(Math.random() * imgdata.length);
+							arr_piece[i].draw(imgdata[i]);
+							arr_piece.splice(i, 1);
+							imgdata.splice(i, 1);
+							if(arr_piece.length == 0) {
+								clearInterval(timer);
+								setTimeout(lunbo, 5000);
+							}
+						})
+					}, 1000)
+					index = index + 1 >= img_arr.length ? 0 : index + 1;
+				}
+
+				function Piece(x, y) {
+					this.x = x;
+					this.y = y;
+					this.draw = function(imgdata) {
+						cxt.putImageData(imgdata, this.x, this.y);
+					}
+				}
+
+				function getimgdata(src) {
+					var loader = document.getElementById("loader");
+					var cxt = loader.getContext('2d');
+					var arr = new Array();
+					var img = new Image();
+					img.src = src;
+					img.onload = function() {
+						cxt.drawImage(img, 0, 0, 1000, 625);
+						for(var i = 0; i < 625; i += 25) {
+							for(var j = 0; j < 1000; j += 25) {
+								arr.push(cxt.getImageData(j, i, 25, 25));
+							}
+						}
+						cxt.clearRect(0, 0, 1000, 625);
+					}
+					return arr;
+				}
+
+				function resetcanvas(index) {
+					var img = new Image();
+					img.src = img_arr[index];
+					img.onload = function() {
+						cxt.drawImage(img, 0, 0, 1000, 625);
+					}
+				}
+			}
+		</script>
+	</head>
+
+	<body>
+		<div id="lunbo">
+			<canvas id="mycanvas" width="1000" height="625"></canvas>
+			<canvas id="loader" width="1000" height="625"></canvas>
+		</div>
+
+	</body>
+
+</html>
